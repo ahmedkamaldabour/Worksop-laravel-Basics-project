@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminHomeController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,8 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/Admin/Home', [AdminHomeController::class, 'index'])->name('admin.home');
-Route::get('/Admin/blank', [AdminHomeController::class, 'blank'])->name('admin.blank');
+Route::get('/', [AdminHomeController::class, 'index'])->name('admin.home');
+Route::get('/admin', [AdminHomeController::class, 'blank'])->name('admin');
 
-
+// route resource category
+Route::resource('admin/category', CategoryController::class)->except('show');
 
