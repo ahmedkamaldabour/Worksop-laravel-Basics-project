@@ -21,6 +21,12 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
+                {{--        Success Message --}}
+                @if (session()->has('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{session()->get('success')}}
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
@@ -29,7 +35,7 @@
                                 <div class="bottom ">
                                 </div>
                                 <div class="card-tools">
-                                    <a href="" class="btn btn-primary">Add New
+                                    <a href="{{route('category.create')}}" class="btn btn-primary">Add New
                                         Category</a>
                                 </div>
 
@@ -49,7 +55,7 @@
                                             <th scope="row">{{ $loop->iteration }}</th>
                                             <td>{{$category->name}}</td>
                                             <td>
-                                                <a href=""
+                                                <a href="{{route('category.edit',$category->id)}}"
                                                    class="btn btn-sm btn-primary m-1">Edit</a>
                                                 <form action="{{route('category.destroy',$category->id)}}"
                                                       method="post">

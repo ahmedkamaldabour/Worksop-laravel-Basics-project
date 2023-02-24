@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use function compact;
+use function dd;
 use function redirect;
+use function response;
 
 class CategoryController extends Controller
 {
@@ -28,7 +30,7 @@ class CategoryController extends Controller
 	 */
 	public function create()
 	{
-		//
+		return view('admin.category.create');
 	}
 
 	/**
@@ -39,7 +41,14 @@ class CategoryController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		//
+		// validate the request
+		$request->validate([
+			'name' => 'required|string|min:3|max:50|unique:categories,name',
+		]);
+		$category = new Category();
+		$category->name = $request->name;
+		$category->save();
+		return redirect()->route('category.index')->with(['success' => 'Category created successfully']);
 	}
 
 	/**
@@ -50,7 +59,8 @@ class CategoryController extends Controller
 	 */
 	public function edit($id)
 	{
-		//
+		$category = Category::findorfail($id);
+		return view('admin.category.edit', compact('category'));
 	}
 
 	/**
@@ -60,7 +70,22 @@ class CategoryController extends Controller
 	 * @param  int                       $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id) {}
+	public function update(Request $request, $id)
+	{
+		// validate the request
+		$request->validate([
+			'name' => 'required|string|min:3|max:50|unique:categories,name,'.$id,
+		]);
+		// update the category in the database
+		$category = Category::findorfail($id);
+		if ($request->name == $category->name) {
+			return redirect()->route('category.index')->with(['success' => 'Category Have The same name']);
+		}
+		$category->name = $request->name;
+		$category->save();
+		return redirect()->route('category.index')->with(['success' => 'Category updated successfully']);
+
+	}
 
 	/**
 	 * Remove the specified resource from storage.
@@ -72,9 +97,9 @@ class CategoryController extends Controller
 	{
 		$category = Category::findorfail($id);
 		$category->delete();
-		return redirect()->route('category.index');
+		// flash message
 
-
+		return redirect()->back()->with('success', 'Category deleted successfully');
 	}
 }
 

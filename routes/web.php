@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AdminHomeController::class, 'index'])->name('admin.home');
 Route::get('/admin', [AdminHomeController::class, 'blank'])->name('admin');
 
+// get post put delete
+
 // route resource category
 Route::resource('admin/category', CategoryController::class)->except('show');
 
